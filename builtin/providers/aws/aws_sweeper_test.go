@@ -59,8 +59,3 @@ func TestMain(m *testing.M) {
 
 	os.Exit(m.Run())
 }
-
-func TestFake(t *testing.T) {
-	log.Printf("Fake test")
-	t.Fatalf("fall through")
-}
