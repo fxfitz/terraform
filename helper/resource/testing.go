@@ -57,11 +57,6 @@ func TestMain(m *testing.M) {
 		for n, s := range SweeperFuncs {
 			log.Printf("[DEBUG] Running (%s) Sweeper...\n", n)
 			for _, f := range s {
-				// client, err := f.Config.(*Config).Client()
-				// if err != nil {
-				// 	log.Printf("[ERR] Error with aws client: %s", err)
-				// 	os.Exit(1)
-				// }
 				if err := f.F(f.Config); err != nil {
 					log.Printf("Error in (%s) Sweeper: %s", n, err)
 					os.Exit(1)

@@ -2,6 +2,7 @@ package aws
 
 import (
 	"fmt"
+	"log"
 	"strings"
 	"testing"
 
@@ -31,7 +32,7 @@ func testSweepKeyPairs(c interface{}) error {
 	client, err := c.(*Config).Client()
 	ec2conn := client.(*AWSClient).ec2conn
 
-	fmt.Printf("Destroying the tmp keys in (%s)\n\n", client.(*AWSClient).region)
+	log.Printf("Destroying the tmp keys in (%s)\n\n", client.(*AWSClient).region)
 
 	resp, err := ec2conn.DescribeKeyPairs(&ec2.DescribeKeyPairsInput{
 		Filters: []*ec2.Filter{
