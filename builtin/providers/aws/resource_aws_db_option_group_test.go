@@ -18,9 +18,9 @@ import (
 
 func init() {
 	// add sweepers for each region
-	var fs []*Sweeper
+	var fs []*resource.Sweeper
 	for _, r := range []string{"us-east-1", "us-west-2"} {
-		fs = append(fs, &Sweeper{
+		fs = append(fs, &resource.Sweeper{
 			Config: &Config{
 				Region: r,
 			},
@@ -28,7 +28,7 @@ func init() {
 		})
 	}
 
-	AddTestSweepers("aws_db_option_group", fs)
+	resource.AddTestSweepers("aws_db_option_group", fs)
 }
 
 func testSweepDbOptionGroups(c interface{}) error {

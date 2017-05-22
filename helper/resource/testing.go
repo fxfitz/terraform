@@ -1,6 +1,7 @@
 package resource
 
 import (
+	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -19,6 +20,36 @@ import (
 	"github.com/hashicorp/terraform/helper/logging"
 	"github.com/hashicorp/terraform/terraform"
 )
+
+func init() {
+	flag.BoolVar(&FlagSweep, "sweep", false, "")
+	SweeperFuncs = make(map[string][]*Sweeper)
+}
+
+func AddTestSweepers(name string, sf []*Sweeper) {
+	if _, ok := SweeperFuncs[name]; ok {
+		log.Printf("Error adding (%s) to SweeperFuncs: function already exists in map", name)
+		os.Exit(1)
+	}
+
+	SweeperFuncs[name] = sf
+}
+
+var FlagSweep bool
+var SweeperFuncs map[string][]*Sweeper
+
+type SweeperFunc func(i interface{}) error
+
+type Sweeper struct {
+	// Configuration for initializing the client connection for each Provider.
+	// Ex google/config.go Config Struct
+	// Ex aws/config.go Config Struct
+	Config interface{}
+
+	// Sweeper function that when invoked sweeps the Provider of specific
+	// resources
+	F SweeperFunc
+}
 
 const TestEnvVar = "TF_ACC"
 
