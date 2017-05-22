@@ -21,20 +21,6 @@ import (
 	"github.com/hashicorp/terraform/terraform"
 )
 
-func init() {
-	flag.BoolVar(&FlagSweep, "sweep", false, "")
-	SweeperFuncs = make(map[string][]*Sweeper)
-}
-
-func AddTestSweepers(name string, sf []*Sweeper) {
-	if _, ok := SweeperFuncs[name]; ok {
-		log.Printf("Error adding (%s) to SweeperFuncs: function already exists in map", name)
-		os.Exit(1)
-	}
-
-	SweeperFuncs[name] = sf
-}
-
 var FlagSweep bool
 var SweeperFuncs map[string][]*Sweeper
 
@@ -51,8 +37,21 @@ type Sweeper struct {
 	F SweeperFunc
 }
 
+func init() {
+	flag.BoolVar(&FlagSweep, "sweep", false, "")
+	SweeperFuncs = make(map[string][]*Sweeper)
+}
+
+func AddTestSweepers(name string, sf []*Sweeper) {
+	if _, ok := SweeperFuncs[name]; ok {
+		log.Printf("Error adding (%s) to SweeperFuncs: function already exists in map", name)
+		os.Exit(1)
+	}
+
+	SweeperFuncs[name] = sf
+}
+
 func TestMain(m *testing.M) {
-	log.Printf("\n@@@\nhere")
 	flag.Parse()
 	if FlagSweep {
 		for n, s := range SweeperFuncs {
